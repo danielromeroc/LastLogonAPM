@@ -128,18 +128,20 @@ function SubmitInsert()
           append resp "<INPUT type='hidden' id='table_name' value='${tname}' />\n";
           
           append resp "<TABLE border='1' cellpadding='5' cellspacing='0'>\n";
-          append resp "<TBODY><TR><TH colspan='3'>'$tname' Table</TH></TR>\n";
-          append resp "<TR><TH>Key</TH><TH colspan='2'>Value</TH></TR>\n";
+          append resp "<TBODY><TR><TH colspan='6'>'$tname' Table</TH></TR>\n";
+          append resp "<TR><TH>Key</TH><TH>Value</TH><TH>Timeout</TH><TH>Lifetime</TH><TH></TH></TR>\n";
           foreach key [table keys -subtable $tname] {
             append resp "<TR><TD class='tkey'>$key</TD>";
             append resp "<TD class='tvalue'>[table lookup -subtable $tname $key]</TD>";
+            append resp "<TD class='tvalue'>[table timeout -subtable $tname $key]</TD>";
+            append resp "<TD class='tvalue'>[table lifetime -subtable $tname $key]</TD>";
             append resp "<TD>\[<A href='/${APPNAME}/deletekey/${tname}/${key}'>X</A>\]</TD>";
             append resp "</TR>\n";
           }
           # Add insertion fields
           append resp "<TR><TD class='tkey'><INPUT type='text' id='table_key' value='' /></TD>";
           append resp "<TD class='tvalue'><INPUT type='text' id='table_value' value='' /></TD>";
-          append resp "<TD>\[<A href='#' onclick='SubmitInsert();' rel='nofollow noopener noreferrer'>+</A>\]</TD>";
+          append resp "<TD>\[<A href='#' onclick='SubmitInsert();' rel='nofollow noopener noreferrer'>+</A>\]</TD><TD></TD><TD></TD>";
           append resp "</TR></TBODY></TABLE>\n";
           
           append resp "<SCRIPT language='JavaScript'><--
