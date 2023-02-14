@@ -10,3 +10,7 @@ The irule must save the last logon time in a persistent storage. As we need to d
 
 We need to display the session variable created in the Policy
 
+## DEBUG
+In order to debug, and to save the table we use the code in (https://community.f5.com/t5/technical-articles/session-table-control-with-irules/ta-p/282763)
+
+
