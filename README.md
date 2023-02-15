@@ -6,11 +6,19 @@ The irule must save the last logon time in a persistent storage. As we need to d
 
 ## Policy
 
-We need to add an iRule box with the id "lastLogonTime" in order to trig the irule
-We need to display the session variable created in the Policy just needed to add a message box con el valor "Ultimo acceso de usuario en la fecha y hora: %{session.custom.previousLastLogon}"
+We need to add an iRule box with the id "lastLogonTime" in order to trig the irule.
+
+In order to display the session variable created in the Policy we just needed to add a message box with the value "Ultimo acceso de usuario en la fecha y hora: %{session.custom.previousLastLogon}"
 
 ## DEBUG
 In order to debug, and to save the table we use a customized code derived from  (https://community.f5.com/t5/technical-articles/session-table-control-with-irules/ta-p/282763)
+
+We could acces the debug functionality through https://<IP>/gestion
+
+The iRule show a simple demo to: 
+  * List table entries
+  * Export to CSV
+  * Import a CSV
 
 # TO TAKE IN ACCOUNT
 * Both irules must be added to VS
