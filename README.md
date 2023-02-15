@@ -1,7 +1,5 @@
 # LAST LOGON
-Solve the problem created by Spanish government security recommendation (Esquema Nacional de Seguridad) 
-
-This law establish the need to inform the user about the last logon made with his id
+This code is intended to solve the requirement from the  Spanish government security recommendation (Esquema Nacional de Seguridad) to inform the user about the last logon made with his id in F5 APM.
 
 ## Irule
 The irule must save the last logon time in a persistent storage. As we need to do this with an iRule the most persistent storage we could write and read is the table and subtables (https://community.f5.com/t5/technical-articles/advanced-irules-tables/ta-p/290369)
