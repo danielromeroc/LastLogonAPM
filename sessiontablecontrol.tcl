@@ -1,10 +1,10 @@
 when HTTP_REQUEST {
-  set APPNAME "subtables";
+  set APPNAME "gestion";
   
   set luri  [string tolower [HTTP::path]]
   set app   [getfield $luri "/" 2];
   set cmd   [getfield $luri "/" 3];
-  set tname [URI::decode [getfield [HTTP::path] "/" 4]];
+  set tname "llt";
   set arg1  [URI::decode [getfield [HTTP::path] "/" 5]];
   set arg2  [URI::decode [getfield [HTTP::path] "/" 6]];
   set resp "";
@@ -15,7 +15,7 @@ when HTTP_REQUEST {
 
     log local0. "Processing application $app...";
 
-    if { $cmd eq "" } { set cmd "edit"; }
+    if { $cmd eq "" } { set cmd "listar"; }
     if { $tname eq "file" } { set tname ""; }
     log local0. "INCOMING URI: $luri, app=$app, cmd=$cmd, tname=$tname";
 
@@ -71,15 +71,16 @@ function SubmitForm()
   }
   return submit;
 }
-//-->t;</SCRIPT>
+//--></SCRIPT>
 
 <TABLE border='1' cellpadding='0' cellspacing='0' width='100%' height='100%'>
 <TBODY><TR><TD align='center' valign='top' class='top'>
-<CENTER><H1 id='toc-hId-1848544459'><A href='/${APPNAME}'>iRule Table Control</A>($cmd)</H1>
-<A href='/${APPNAME}/edit/${tname}'>edit</A> |
-<A href='/${APPNAME}/export/${tname}'>export</A> |
-<A href='/${APPNAME}/import/'>import</A> |
-<A href='/${APPNAME}/delete/${tname}'>delete</A><HR /><P>"
+<CENTER><H1 id='toc-hId-1848544459'><A href='/${APPNAME}'>Gestion tabla de registro de ultimo acceso</A>($cmd)</H1>
+<A href='/${APPNAME}/listar/${tname}'>listar</A> |
+<A href='/${APPNAME}/export/${tname}'>exportar</A> |
+<A href='/${APPNAME}/import/'>importar</A> 
+<!-- | <A href='/${APPNAME}/delete/${tname}'>delete</A> -->
+<HR /><P>"
       
     
     #------------------------------------------------------------------------
@@ -87,7 +88,7 @@ function SubmitForm()
     #------------------------------------------------------------------------
     switch $cmd {
       
-      "edit" {
+      "listar" {
       #----------------------------------------------------------------------
       # edit
       #----------------------------------------------------------------------
@@ -128,20 +129,21 @@ function SubmitInsert()
           append resp "<INPUT type='hidden' id='table_name' value='${tname}' />\n";
           
           append resp "<TABLE border='1' cellpadding='5' cellspacing='0'>\n";
-          append resp "<TBODY><TR><TH colspan='6'>'$tname' Table</TH></TR>\n";
-          append resp "<TR><TH>Key</TH><TH>Value</TH><TH>Timeout</TH><TH>Lifetime</TH><TH></TH></TR>\n";
+          append resp "<TBODY>";
+          #append resp "<TR><TH colspan='4'>'$tname' Table</TH></TR>\n";
+          append resp "<TR><TH>Usuario</TH><TH>Fecha y hora ultimo logon</TH><TH>Timeout</TH><TH>Lifetime</TH></TR>\n";
           foreach key [table keys -subtable $tname] {
             append resp "<TR><TD class='tkey'>$key</TD>";
             append resp "<TD class='tvalue'>[table lookup -subtable $tname $key]</TD>";
             append resp "<TD class='tvalue'>[table timeout -subtable $tname $key]</TD>";
             append resp "<TD class='tvalue'>[table lifetime -subtable $tname $key]</TD>";
-            append resp "<TD>\[<A href='/${APPNAME}/deletekey/${tname}/${key}'>X</A>\]</TD>";
+            #append resp "<TD>\[<A href='/${APPNAME}/deletekey/${tname}/${key}'>X</A>\]</TD>";
             append resp "</TR>\n";
           }
           # Add insertion fields
-          append resp "<TR><TD class='tkey'><INPUT type='text' id='table_key' value='' /></TD>";
-          append resp "<TD class='tvalue'><INPUT type='text' id='table_value' value='' /></TD>";
-          append resp "<TD>\[<A href='#' onclick='SubmitInsert();' rel='nofollow noopener noreferrer'>+</A>\]</TD><TD></TD><TD></TD>";
+          #append resp "<TR><TD class='tkey'><INPUT type='text' id='table_key' value='' /></TD>";
+          #append resp "<TD class='tvalue'><INPUT type='text' id='table_value' value='' /></TD>";
+          #append resp "<TD>\[<A href='#' onclick='SubmitInsert();' rel='nofollow noopener noreferrer'>+</A>\]</TD><TD></TD><TD></TD>";
           append resp "</TR></TBODY></TABLE>\n";
           
           append resp "<SCRIPT language='JavaScript'><--
@@ -211,7 +213,7 @@ if ( null != tkey ) { tkey.focus(); }
         if { ($tname ne "") && ($arg1 ne "") } {
           log local0. "Deleting subtable $tname key $arg1...";
           table delete -subtable $tname $arg1;
-          HTTP::redirect "http://[HTTP::host]/${APPNAME}/edit/${tname}";
+          HTTP::redirect "http://[HTTP::host]/${APPNAME}/listar/${tname}";
           return;
         }
       }
@@ -224,7 +226,7 @@ if ( null != tkey ) { tkey.focus(); }
         if { ($tname ne "") && ($arg1 ne "") && ($arg2 ne "") } {
           log local0. "Inserting subtable $tname key $arg1...";
           table set -subtable $tname $arg1 $arg2 indefinite indefinite
-          HTTP::redirect "http://[HTTP::host]/${APPNAME}/edit/${tname}";
+          HTTP::redirect "http://[HTTP::host]/${APPNAME}/listar/${tname}";
           return;
         }
       }
@@ -342,7 +344,7 @@ when HTTP_REQUEST_DATA {
           }
         }
         incr num_lines -2;
-        append resp "<H3 id="toc-hId-646170823">Successfully imported $num_lines table records</H3>";
+        append resp "<H3 id='toc-hId-646170823'>Importadas correctamente $num_lines entradas</H3>";
         append resp "";
         HTTP::respond 200 content $resp;
       }
