@@ -15,9 +15,10 @@ We need to display the session variable created in the Policy just needed to add
 In order to debug, and to save the table we use a customized code derived from  (https://community.f5.com/t5/technical-articles/session-table-control-with-irules/ta-p/282763)
 
 # TO TAKE IN ACCOUNT
+* Both irules must be added to VS
 * Tables are deleted in case of reboot
 * A backup could be done via the url /gestion/export/llt
-** A simple curl -k https://<VirtualServerIP>/gestion/export/llt > backup.csv could be used to automate backup
+** A simple curl -k https://<VirtualServerIP>/gestion/export/llt > backup.csv could be used to automate backup in crontab daily
 * Tables are stored in memory and no limits are set for storing them (must be carefull)
 ** In case needed url -k https://<VirtualServerIP>/gestion/delete/llt remove all subtable entries
 
